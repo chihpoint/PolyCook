@@ -1,9 +1,9 @@
-package com.example.polycook.ui.theme
+package com.chihpoint.polycook.ui.theme
 
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
-import com.example.polycook.R
+import com.chihpoint.polycook.R
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.sp

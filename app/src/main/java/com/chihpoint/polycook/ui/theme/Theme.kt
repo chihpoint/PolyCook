@@ -1,4 +1,4 @@
-package com.example.polycook.ui.theme
+package com.chihpoint.polycook.ui.theme
 
 import android.app.Activity
 import android.os.Build

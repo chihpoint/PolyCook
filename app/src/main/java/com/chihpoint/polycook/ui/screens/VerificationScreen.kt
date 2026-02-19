@@ -1,4 +1,4 @@
-package com.example.polycook
+package com.chihpoint.polycook.ui.screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -21,7 +21,14 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.polycook.ui.theme.*
+import com.chihpoint.polycook.ui.theme.AccentPink
+import com.chihpoint.polycook.ui.theme.AppBackground
+import com.chihpoint.polycook.ui.theme.ButtonBeige
+import com.chihpoint.polycook.ui.theme.CartoonFont
+import com.chihpoint.polycook.ui.theme.TextBlack
+import com.chihpoint.polycook.ui.theme.TextGray
+import com.chihpoint.polycook.ui.theme.TextWhite
+import com.chihpoint.polycook.R
 
 @Composable
 fun VerificationScreen(
