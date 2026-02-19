@@ -1,4 +1,4 @@
-package com.example.polycook.ui.theme
+package com.chihpoint.polycook.ui.theme
 
 import androidx.compose.ui.graphics.Color
 

@@ -1,4 +1,4 @@
-package com.example.polycook
+package com.chihpoint.polycook.ui.screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -10,7 +10,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -18,8 +17,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.chihpoint.polycook.ui.theme.AppBackground
+import com.chihpoint.polycook.ui.theme.ButtonBeige
+import com.chihpoint.polycook.ui.theme.CartoonFont
+import com.chihpoint.polycook.ui.theme.TextBlack
+import com.chihpoint.polycook.ui.theme.TextWhite
+import com.chihpoint.polycook.R
 // Импортируем наши цвета (убедись, что они видны из шага 2)
-import com.example.polycook.ui.theme.*
 
 @Composable
 fun WelcomeScreen(

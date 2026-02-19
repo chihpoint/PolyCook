@@ -1,4 +1,4 @@
-package com.example.polycook
+package com.chihpoint.polycook.ui.screens
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -16,7 +16,12 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.polycook.ui.theme.*
+import com.chihpoint.polycook.ui.theme.AccentPink
+import com.chihpoint.polycook.ui.theme.AppBackground
+import com.chihpoint.polycook.ui.theme.ButtonBeige
+import com.chihpoint.polycook.ui.theme.TextBlack
+import com.chihpoint.polycook.ui.theme.TextGray
+import com.chihpoint.polycook.ui.theme.TextWhite
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

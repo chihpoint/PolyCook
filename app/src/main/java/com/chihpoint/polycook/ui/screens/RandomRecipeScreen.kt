@@ -1,4 +1,4 @@
-package com.example.polycook
+package com.chihpoint.polycook.ui.screens
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -17,16 +17,20 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.polycook.ui.theme.*
+import com.chihpoint.polycook.ui.theme.AccentPink
+import com.chihpoint.polycook.ui.theme.AppBackground
+import com.chihpoint.polycook.ui.theme.ButtonBeige
+import com.chihpoint.polycook.ui.theme.TextBlack
+import com.chihpoint.polycook.ui.theme.TextWhite
 
 @Composable
-fun SearchResultScreen(
+fun RandomRecipeScreen(
     onBackClick: () -> Unit,
-    onNextRecipeClick: () -> Unit
+    onNextRandomClick: () -> Unit
 ) {
+    // Состояние лайка
     var isFavorite by remember { mutableStateOf(false) }
 
     Box(
@@ -43,34 +47,37 @@ fun SearchResultScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                text = "ХЛЕБНЫЕ ЛЕПЕШКИ",
+                text = "ШОКОЛАДНОЕ ПЕЧЕНЬЕ С ЭСПРЕССО",
                 color = ButtonBeige,
-                fontSize = 28.sp,
+                fontSize = 26.sp,
                 fontWeight = FontWeight.ExtraBold,
-                textAlign = TextAlign.Center,
+                lineHeight = 30.sp,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(bottom = 16.dp)
             )
 
+            // Ингредиенты
             RecipeSection(
                 title = "Ингредиенты:",
-                content = "Мука - 400-500 г, Вода горячая (70-80 градусов) - 250-300 мл, Соль - 1 ч. ложка"
+                content = "мука — 1 Стакан, какао — 2 Ст. ложки, соль — 0,2 Чайных ложки, соды — 1/2 Чайных ложки, яйца — 2 Штуки, ванильный сахар — 1 Чайная ложка, масло сливочное — 2 Ст. ложки, вода — 2 Ст. ложки, сахарный песок — 0,7 Стакана, большое яйцо — 1 Штука, шоколадные чипсы — 1 Стакан, разрыхлитель — 1 Чайная ложка, эспрессо — 0,3 Стакана, шоколад темный — 170 Грамм"
             )
 
             Spacer(modifier = Modifier.height(16.dp))
 
+            // Рецепт
             RecipeSection(
                 title = "Рецепт:",
-                content = "Замесить тесто на теплой воде так, чтобы оно было мягким. Для этого насыпать муку горкой, сделать в середине углубление. Понемногу добавляя в него теплую воду с добавлением соли, вымесить мягкое, эластичное тесто. Дать тесту полежать 10 минут. Разделать тесто на шарики размером с куриное яйцо. Затем шарики сплющить и придать форму толстых лепешек. Разогреть сковороду. Лепешки по-домашнему жарить на сковороде с ровным днищем. Как только лепешка начнет надуваться (через 2 минуты), перевернуть и жарить до готовности (еще 1,5 минуты). Домашние лепёшки готовы!"
+                content = "Кладем в маленькую мисочку масло и шоколад. Ставим миску на паровую баню и помешивая, пока ждем пока все не растопится. Измельчаем в кухонном комбайне зерна эспрессо, покрытые шоколадом. Теперь смешайте: измельченные зерна эспрессо, муку, какао, разрыхлитель и соль. В отдельной емкости взбиваем сахар, яйца, воду и ванильный экстракт. Постепенно добавляя смесь сухих ингредиентов, продолжаем все взбивать до густой однородной массы. Затем добавляем растопленный шоколад и шоколадные чипсы, перемешиваем. Выкладываем тесто на заранее застеленный пергаментом противень. Выпекаем 20 минут при температуре 150 градусов.\nПриятного аппетита!"
             )
 
             Spacer(modifier = Modifier.height(32.dp))
 
+            //  КНОПКА "ДРУГОЙ РЕЦЕПТ"
             Button(
                 onClick = {
                     isFavorite = false
-                    onNextRecipeClick()
+                    onNextRandomClick()
                 },
                 colors = ButtonDefaults.buttonColors(containerColor = ButtonBeige),
                 shape = RoundedCornerShape(25.dp),
@@ -103,6 +110,7 @@ fun SearchResultScreen(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
+            // Лайк
             IconButton(
                 onClick = { isFavorite = !isFavorite },
                 modifier = Modifier
@@ -117,6 +125,7 @@ fun SearchResultScreen(
                 )
             }
 
+            // Кнопка Вернуться
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.padding(start = 16.dp)
