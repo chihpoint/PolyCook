@@ -6,22 +6,17 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -78,11 +73,11 @@ fun SavedRecipesScreen(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        //  Кнопка ВЕРНУТЬСЯ
+        //  Кнопка ВЕРНУТЬСЯ (Изменено)
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .clickable { onBackClick() },
+                .clickable { onBackClick() }, // Вся строка кликабельна
             horizontalArrangement = Arrangement.End,
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -90,23 +85,18 @@ fun SavedRecipesScreen(
                 text = "Вернуться",
                 color = TextWhite,
                 fontSize = 18.sp,
+                fontFamily = DefaultFont,
                 fontWeight = FontWeight.Medium
             )
+
             Spacer(modifier = Modifier.width(12.dp))
-            Surface(
-                color = AccentPink,
-                shape = CircleShape,
-                modifier = Modifier.size(48.dp)
-            ) {
-                Box(contentAlignment = Alignment.Center) {
-                    Icon(
-                        imageVector = Icons.Default.ArrowBack, // Стрелка
-                        contentDescription = "Назад",
-                        tint = TextWhite,
-                        modifier = Modifier.size(24.dp)
-                    )
-                }
-            }
+
+            // Замена Surface+Icon на Image
+            Image(
+                painter = painterResource(id = R.drawable.strelka),
+                contentDescription = "Назад",
+                modifier = Modifier.size(48.dp) // Размер картинки-кнопки
+            )
         }
         Spacer(modifier = Modifier.height(24.dp))
     }
@@ -140,6 +130,7 @@ fun SavedRecipeCard(
                 text = text,
                 color = TextBlack,
                 fontSize = 16.sp,
+                fontFamily = DefaultFont,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.weight(1f)
             )
@@ -153,6 +144,7 @@ fun SavedRecipeCard(
         }
     }
 }
+
 @Preview(showBackground = true)
 @Composable
 fun SavedRecipesScreenPreview() {

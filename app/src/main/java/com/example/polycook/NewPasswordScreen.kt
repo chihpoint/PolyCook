@@ -2,6 +2,7 @@ package com.example.polycook
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -12,6 +13,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -27,7 +29,8 @@ import com.example.polycook.ui.theme.*
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NewPasswordScreen(
-    onChangePasswordClick: () -> Unit // Действие "Сменить пароль"
+    onChangePasswordClick: () -> Unit, // Действие "Сменить пароль"
+    onBackClick: () -> Unit // <--- НОВЫЙ ПАРАМЕТР
 ) {
     var password by remember { mutableStateOf("") }
     var isPasswordVisible by remember { mutableStateOf(false) }
@@ -36,116 +39,155 @@ fun NewPasswordScreen(
     val hasDigit = password.any { it.isDigit() }
     val hasUppercase = password.any { it.isUpperCase() }
 
-    val isFormValid = hasLength && hasDigit && hasUppercase
-
-    Column(
+    // 1. ОБЕРТКА Box
+    Box(
         modifier = Modifier
             .fillMaxSize()
             .background(AppBackground)
-            .padding(24.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(24.dp)
+                .offset(y = (-20).dp), // 2. СДВИГ ВВЕРХ
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
 
-        // --- Логотипы ---
-        Image(
-            painter = painterResource(id = R.drawable.polycook_logo),
-            contentDescription = null,
-            modifier = Modifier.size(160.dp),
-            contentScale = ContentScale.Fit
-        )
-        Image(
-            painter = painterResource(id = R.drawable.polycook_text),
-            contentDescription = null,
-            modifier = Modifier.width(160.dp),
-            contentScale = ContentScale.Fit
-        )
+            // --- Логотипы ---
+            Image(
+                painter = painterResource(id = R.drawable.polycook_logo),
+                contentDescription = null,
+                modifier = Modifier.size(260.dp).offset(y = -20.dp),
+                contentScale = ContentScale.Fit
+            )
+            Image(
+                painter = painterResource(id = R.drawable.polycook_text),
+                contentDescription = null,
+                modifier = Modifier.width(160.dp),
+                contentScale = ContentScale.Fit
+            )
 
-        Spacer(modifier = Modifier.height(48.dp))
+            Spacer(modifier = Modifier.height(48.dp))
 
-        // Заголовок поля
-        Text(
-            text = "Введите новый пароль",
-            color = TextWhite,
-            fontSize = 18.sp,
-            fontWeight = FontWeight.Medium,
-            modifier = Modifier.fillMaxWidth().padding(start = 4.dp, bottom = 8.dp)
-        )
+            // Заголовок поля
+            Text(
+                text = "Введите новый пароль",
+                color = TextWhite,
+                fontSize = 18.sp,
+                fontWeight = FontWeight.Medium,
+                fontFamily = DefaultFont,
+                modifier = Modifier.fillMaxWidth().padding(start = 4.dp, bottom = 8.dp)
+            )
 
-        //  Поле ввода пароля
-        TextField(
-            value = password,
-            onValueChange = { password = it },
-            placeholder = { Text("введите пароль", color = TextGray) },
-            leadingIcon = { Icon(Icons.Default.Lock, null, tint = TextWhite) },
-            trailingIcon = {
-                IconButton(onClick = { isPasswordVisible = !isPasswordVisible }) {
-                    Icon(
-                        imageVector = if (isPasswordVisible) Icons.Default.Visibility else Icons.Default.VisibilityOff,
-                        contentDescription = null,
-                        tint = TextWhite
+            // Поле ввода пароля
+            TextField(
+                value = password,
+                onValueChange = { password = it },
+                placeholder = { Text("введите пароль", color = TextGray) },
+                leadingIcon = { Icon(Icons.Default.Lock, null, tint = TextWhite) },
+                trailingIcon = {
+                    IconButton(onClick = { isPasswordVisible = !isPasswordVisible }) {
+                        Icon(
+                            imageVector = if (isPasswordVisible) Icons.Default.Visibility else Icons.Default.VisibilityOff,
+                            contentDescription = null,
+                            tint = TextWhite
+                        )
+                    }
+                },
+                visualTransformation = if (isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+                colors = TextFieldDefaults.textFieldColors(
+                    containerColor = Color.Transparent,
+                    focusedIndicatorColor = TextWhite,
+                    unfocusedIndicatorColor = TextWhite,
+                    textColor = TextWhite,
+                    cursorColor = TextWhite
+                ),
+                modifier = Modifier.fillMaxWidth()
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            // Блок с правилами
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .background(RequirementsBackground, RoundedCornerShape(12.dp))
+                    .padding(16.dp)
+            ) {
+                Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.fillMaxWidth()) {
+                    Text(
+                        text = "Ваш пароль должен содержать минимум:",
+                        color = TextWhite,
+                        fontSize = 12.sp,
+                        textAlign = TextAlign.Center
                     )
+                    Spacer(modifier = Modifier.height(8.dp))
+
+                    RequirementItem(text = "8 символов", isCompleted = hasLength)
+                    RequirementItem(text = "1 цифру", isCompleted = hasDigit)
+                    RequirementItem(text = "1 заглавную букву", isCompleted = hasUppercase)
                 }
-            },
-            visualTransformation = if (isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
-            colors = TextFieldDefaults.textFieldColors(
-                containerColor = Color.Transparent,
-                focusedIndicatorColor = TextWhite,
-                unfocusedIndicatorColor = TextWhite,
-                textColor = TextWhite,
-                cursorColor = TextWhite
-            ),
-            modifier = Modifier.fillMaxWidth()
-        )
+            }
 
-        Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.weight(1f))
 
-        //  Блок с правилами
+            // Кнопка "Сменить пароль"
+            Button(
+                onClick = onChangePasswordClick,
+                colors = ButtonDefaults.buttonColors(containerColor = ButtonBeige),
+                shape = RoundedCornerShape(50),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(56.dp)
+            ) {
+                Text(
+                    text = "Сменить пароль",
+                    color = TextBlack,
+                    fontSize = 18.sp,
+                    fontFamily = DefaultFont,
+                    fontWeight = FontWeight.Bold
+                )
+            }
+
+            // 3. ОТСТУП СНИЗУ (чтобы кнопка "Сменить пароль" не наезжала на "Вернуться")
+            Spacer(modifier = Modifier.height(80.dp))
+        }
+
+        // 4. КНОПКА "ВЕРНУТЬСЯ" (правый нижний угол)
         Box(
             modifier = Modifier
-                .fillMaxWidth()
-                .background(RequirementsBackground, RoundedCornerShape(12.dp))
-                .padding(16.dp)
+                .align(Alignment.BottomEnd)
+                .padding(bottom = 24.dp, end = 24.dp)
         ) {
-            Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.fillMaxWidth()) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .clip(RoundedCornerShape(12.dp))
+                    .clickable { onBackClick() }
+                    .padding(8.dp)
+            ) {
                 Text(
-                    text = "Ваш пароль должен содержать минимум:",
+                    text = "Вернуться",
                     color = TextWhite,
-                    fontSize = 12.sp,
-                    textAlign = TextAlign.Center
+                    fontFamily = DefaultFont,
+                    fontSize = 18.sp
                 )
-                Spacer(modifier = Modifier.height(8.dp))
 
-                RequirementItem(text = "8 символов", isCompleted = hasLength)
-                RequirementItem(text = "1 цифру", isCompleted = hasDigit)
-                RequirementItem(text = "1 заглавную букву", isCompleted = hasUppercase)
+                Spacer(modifier = Modifier.width(12.dp))
+
+                Image(
+                    painter = painterResource(id = R.drawable.strelka),
+                    contentDescription = "Вернуться",
+                    modifier = Modifier.height(50.dp),
+                    contentScale = ContentScale.Fit
+                )
             }
         }
-
-        Spacer(modifier = Modifier.weight(1f))
-
-        //  Кнопка "Сменить пароль"
-        Button(
-            onClick = onChangePasswordClick,
-            colors = ButtonDefaults.buttonColors(containerColor = ButtonBeige),
-            shape = RoundedCornerShape(50),
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(56.dp)
-        ) {
-            Text(
-                text = "Сменить пароль",
-                color = TextBlack,
-                fontSize = 18.sp,
-                fontWeight = FontWeight.Bold
-            )
-        }
-
-        Spacer(modifier = Modifier.height(48.dp))
     }
 }
 
 @Preview(showBackground = true)
 @Composable
 fun NewPasswordScreenPreview() {
-    NewPasswordScreen({})
+    NewPasswordScreen({}, {})
 }

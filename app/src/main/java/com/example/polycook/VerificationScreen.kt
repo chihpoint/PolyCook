@@ -13,6 +13,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -26,123 +27,166 @@ import com.example.polycook.ui.theme.*
 @Composable
 fun VerificationScreen(
     onVerifyClick: () -> Unit,
-    onResendClick: () -> Unit
+    onResendClick: () -> Unit,
+    onBackClick: () -> Unit // 1. <--- НОВЫЙ ПАРАМЕТР
 ) {
     var code by remember { mutableStateOf("") }
 
-    Column(
+    // 2. <--- Box ДЛЯ СЛОЕВ
+    Box(
         modifier = Modifier
             .fillMaxSize()
             .background(AppBackground)
-            .padding(24.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        // --- Логотип ---
-        Image(
-            painter = painterResource(id = R.drawable.polycook_logo),
-            contentDescription = "Логотип повара",
-            contentScale = ContentScale.Fit,
+        Column(
             modifier = Modifier
-                .size(300.dp)
-                .offset(x = (-20).dp, y = (-20).dp)
-        )
+                .fillMaxSize()
+                .padding(24.dp)
+                .offset(y = (-20).dp), // 3. <--- СДВИГ ВВЕРХ НА 20dp
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            // --- Логотип ---
+            Image(
+                painter = painterResource(id = R.drawable.polycook_logo),
+                contentDescription = "Логотип повара",
+                contentScale = ContentScale.Fit,
+                modifier = Modifier
+                    .size(300.dp)
+                    .offset(x = (-20).dp, y = (-20).dp)
+            )
 
-        Spacer(modifier = Modifier.height(1.dp))
-        Text(
-            text = "PolyCook",
-            color = ButtonBeige,
-            fontSize = 70.sp,
-            fontFamily = CartoonFont,
-            textAlign = TextAlign.Center,
-            modifier = Modifier
-                .fillMaxWidth()
-                .offset(y = (-40).dp)
-        )
+            Spacer(modifier = Modifier.height(1.dp))
+            Text(
+                text = "PolyCook",
+                color = ButtonBeige,
+                fontSize = 70.sp,
+                fontFamily = CartoonFont,
+                textAlign = TextAlign.Center,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .offset(y = (-40).dp)
+            )
 
-        Spacer(modifier = Modifier.height(1.dp))
+            Spacer(modifier = Modifier.height(1.dp))
 
-        Text(
-            text = "На Вашу почту po******@ya****.ru\nотправлено письмо с кодом\nподтверждения. Введите его ниже",
-            color = TextWhite,
-            fontSize = 16.sp,
-            textAlign = TextAlign.Center,
-            lineHeight = 24.sp
-        )
+            Text(
+                text = "На Вашу почту po******@ya****.ru\nотправлено письмо с кодом\nподтверждения. Введите его ниже",
+                color = TextWhite,
+                fontSize = 16.sp,
+                textAlign = TextAlign.Center,
+                fontFamily = DefaultFont,
+                lineHeight = 24.sp,
+                modifier = Modifier.offset(y = (-20).dp) // Чуть подняли текст
+            )
 
-        Spacer(modifier = Modifier.height(32.dp))
+            Spacer(modifier = Modifier.height(32.dp))
 
-        BasicTextField(
-            value = code,
-            onValueChange = {
-                if (it.length <= 5 && it.all { char -> char.isDigit() }) {
-                    code = it
-                }
-            },
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.NumberPassword),
-            decorationBox = {
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(8.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    repeat(5) { index ->
-
-                        val char = code.getOrNull(index)?.toString() ?: ""
-
-
-                        Box(
-                            modifier = Modifier
-                                .size(56.dp)
-                                .background(ButtonBeige, RoundedCornerShape(12.dp)),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            Text(
-                                text = char,
-                                color = TextBlack,
-                                fontSize = 24.sp,
-                                fontWeight = FontWeight.Bold
-                            )
+            // Поле ввода кода
+            BasicTextField(
+                value = code,
+                onValueChange = {
+                    if (it.length <= 5 && it.all { char -> char.isDigit() }) {
+                        code = it
+                    }
+                },
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.NumberPassword),
+                decorationBox = {
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        repeat(5) { index ->
+                            val char = code.getOrNull(index)?.toString() ?: ""
+                            Box(
+                                modifier = Modifier
+                                    .size(56.dp)
+                                    .background(ButtonBeige, RoundedCornerShape(12.dp)),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Text(
+                                    text = char,
+                                    color = TextBlack,
+                                    fontSize = 24.sp,
+                                    fontFamily = DefaultFont,
+                                    fontWeight = FontWeight.Bold
+                                )
+                            }
                         }
                     }
-                }
+                },
+                modifier = Modifier.offset(y = (-20).dp)
+            )
+
+            Spacer(modifier = Modifier.weight(1f))
+
+            Button(
+                onClick = onVerifyClick,
+                colors = ButtonDefaults.buttonColors(containerColor = ButtonBeige),
+                shape = RoundedCornerShape(50),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(56.dp)
+            ) {
+                Text(
+                    text = "Продолжить",
+                    color = TextBlack,
+                    fontSize = 18.sp,
+                    fontFamily = DefaultFont,
+                    fontWeight = FontWeight.Bold
+                )
             }
-        )
 
-        Spacer(modifier = Modifier.weight(1f))
+            Spacer(modifier = Modifier.height(24.dp))
 
-        Button(
-            onClick = onVerifyClick,
-            colors = ButtonDefaults.buttonColors(containerColor = ButtonBeige),
-            shape = RoundedCornerShape(50),
+            Row {
+                Text(text = "Письмо не пришло? ", fontFamily = DefaultFont, color = TextGray)
+                Text(
+                    text = "Отправить повторно",
+                    color = AccentPink,
+                    fontWeight = FontWeight.Bold,
+                    fontFamily = DefaultFont,
+                    modifier = Modifier.clickable { onResendClick() }
+                )
+            }
+            // Дополнительный отступ снизу, чтобы текст не наезжал на кнопку "Вернуться"
+            Spacer(modifier = Modifier.height(60.dp))
+        }
+
+        // 4. <--- КНОПКА "ВЕРНУТЬСЯ"
+        Box(
             modifier = Modifier
-                .fillMaxWidth()
-                .height(56.dp)
+                .align(Alignment.BottomEnd)
+                .padding(bottom = 24.dp, end = 24.dp)
         ) {
-            Text(
-                text = "Продолжить",
-                color = TextBlack,
-                fontSize = 18.sp,
-                fontWeight = FontWeight.Bold
-            )
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier
+                    .clip(RoundedCornerShape(12.dp))
+                    .clickable { onBackClick() }
+                    .padding(8.dp)
+            ) {
+                Text(
+                    text = "Вернуться",
+                    color = TextWhite,
+                    fontFamily = DefaultFont,
+                    fontSize = 18.sp
+                )
+
+                Spacer(modifier = Modifier.width(12.dp))
+
+                Image(
+                    painter = painterResource(id = R.drawable.strelka),
+                    contentDescription = "Вернуться",
+                    modifier = Modifier.height(50.dp),
+                    contentScale = ContentScale.Fit
+                )
+            }
         }
-
-        Spacer(modifier = Modifier.height(24.dp))
-
-        Row {
-            Text(text = "Письмо не пришло? ", color = TextGray)
-            Text(
-                text = "Отправить повторно",
-                color = AccentPink,
-                fontWeight = FontWeight.Bold,
-                modifier = Modifier.clickable { onResendClick() }
-            )
-        }
-
-        Spacer(modifier = Modifier.height(24.dp))
     }
 }
 
 @Preview(showBackground = true)
 @Composable
 fun VerificationScreenPreview() {
-    VerificationScreen({}, {})
+    VerificationScreen({}, {}, {})
 }

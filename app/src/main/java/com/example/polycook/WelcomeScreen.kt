@@ -62,6 +62,7 @@ fun WelcomeScreen(
             text = "Войдите в личный кабинет, чтобы\nсохранять рецепты",
             color = TextWhite,
             fontSize = 18.sp,
+            fontFamily = DefaultFont,
             textAlign = TextAlign.Center,
             fontWeight = FontWeight.Medium
         )
@@ -81,6 +82,7 @@ fun WelcomeScreen(
                 text = "Войти",
                 color = TextBlack,
                 fontSize = 18.sp,
+                fontFamily = DefaultFont,
                 fontWeight = FontWeight.Bold
             )
         }
@@ -100,6 +102,7 @@ fun WelcomeScreen(
                 text = "Продолжить без входа",
                 color = TextBlack,
                 fontSize = 18.sp,
+                fontFamily = DefaultFont,
                 fontWeight = FontWeight.Bold
             )
         }

@@ -2,11 +2,9 @@ package com.example.polycook
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -21,7 +19,7 @@ import com.example.polycook.ui.theme.*
 @Composable
 fun NoRecipeFoundScreen(
     onTryAgainClick: () -> Unit,      // Кнопка "Ввести другие продукты"
-    onBackToMenuClick: () -> Unit     // Кнопка "Вернуться в главное меню"
+    onBackToMenuClick: () -> Unit     // Переход на HomeScreen
 ) {
     Box(
         modifier = Modifier
@@ -29,6 +27,7 @@ fun NoRecipeFoundScreen(
             .background(AppBackground)
             .padding(16.dp)
     ) {
+        // Центральная часть (Грустный пельмень и текст)
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -41,7 +40,6 @@ fun NoRecipeFoundScreen(
                 modifier = Modifier.size(200.dp)
             )
 
-
             Spacer(modifier = Modifier.height(24.dp))
 
             Text(
@@ -49,6 +47,7 @@ fun NoRecipeFoundScreen(
                 color = TextWhite,
                 fontSize = 18.sp,
                 textAlign = TextAlign.Center,
+                fontFamily = DefaultFont,
                 lineHeight = 24.sp,
                 modifier = Modifier.padding(horizontal = 16.dp)
             )
@@ -67,36 +66,36 @@ fun NoRecipeFoundScreen(
                     text = "Ввести другие продукты",
                     color = TextBlack,
                     fontSize = 18.sp,
+                    fontFamily = DefaultFont,
                     fontWeight = FontWeight.Bold
                 )
             }
         }
 
+        // Нижний правый угол: Стрелка + Текст справа
         Row(
             modifier = Modifier
-                .align(Alignment.BottomEnd)
-                .padding(bottom = 16.dp),
+                .align(Alignment.BottomEnd) // Нижний правый угол
+                .padding(bottom = 16.dp, end = 8.dp)
+                .clickable { onBackToMenuClick() }, // Делаем кликабельным для перехода
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(
-                text = "Вернуться в главное меню",
-                color = TextWhite,
-                fontSize = 16.sp,
-                modifier = Modifier.padding(end = 12.dp)
+            // Картинка стрелки
+            Image(
+                painter = painterResource(id = R.drawable.strelka),
+                contentDescription = "Back to Menu",
+                modifier = Modifier.size(40.dp) // Размер стрелки (можно настроить)
             )
 
-            IconButton(
-                onClick = onBackToMenuClick,
-                modifier = Modifier
-                    .size(50.dp)
-                    .background(AccentPink, CircleShape)
-            ) {
-                Icon(
-                    imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                    contentDescription = "Back",
-                    tint = TextWhite
-                )
-            }
+            Spacer(modifier = Modifier.width(8.dp)) // Отступ между стрелкой и текстом
+
+            // Текст справа от картинки
+            Text(
+                text = "вернуться в главное меню",
+                color = TextWhite,
+                fontSize = 16.sp,
+                fontFamily = DefaultFont
+            )
         }
     }
 }

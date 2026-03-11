@@ -11,7 +11,9 @@ import androidx.compose.ui.unit.sp
 val CartoonFont = FontFamily(
         Font(R.font.smeshariki)
         )
-
+val DefaultFont = FontFamily(
+        Font(R.font.comicsansms)
+)
 val Typography = Typography(
         bodyLarge = TextStyle(
                 fontFamily = FontFamily.Default,

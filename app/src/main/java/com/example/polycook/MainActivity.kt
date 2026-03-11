@@ -26,7 +26,7 @@ class MainActivity : ComponentActivity() {
                                 navController.navigate("login")
                             },
                             onSkipClick = {
-                                println("Нажали Пропустить")
+                                navController.navigate("home")
                             }
                         )
                     }
@@ -45,6 +45,13 @@ class MainActivity : ComponentActivity() {
                             },
                             onForgotPasswordClick = {
                                 navController.navigate("new_password")
+                            },
+                            onBackClick = {
+                                // Возвращаемся на экран приветствия
+                                navController.navigate("welcome") {
+                                    // Очищаем стек, чтобы "welcome" стал единственным экраном
+                                    popUpTo("welcome") { inclusive = true }
+                                }
                             }
                         )
                     }
@@ -58,6 +65,11 @@ class MainActivity : ComponentActivity() {
                             },
                             onLoginClick = {
                                 navController.popBackStack()
+                            },
+                            onBackClick = {
+                                navController.navigate("login") {
+                                    popUpTo("login") { inclusive = true }
+                                }
                             }
                         )
                     }
@@ -68,6 +80,11 @@ class MainActivity : ComponentActivity() {
                             },
                             onResendClick = {
                                 println("Отправляем код заново")
+                            },
+                            onBackClick = {
+                                navController.navigate("register") {
+                                    popUpTo("register") { inclusive = true }
+                                }
                             }
                         )
                     }
@@ -77,6 +94,10 @@ class MainActivity : ComponentActivity() {
                                 // Логика смены (например, вернуть на логин)
                                 println("Пароль изменен")
                                 navController.navigate("login") // Возвращаем на вход
+                            },
+                            onBackClick = {
+                                // Возврат назад
+                                navController.popBackStack()
                             }
                         )
                     }
@@ -85,7 +106,17 @@ class MainActivity : ComponentActivity() {
                             onSearchClick = { navController.navigate("search_ingredients") },
                             onRandomClick = { navController.navigate("random_recipe") },
                             onSavedClick = { navController.navigate("saved_recipes")  },
-                            onInstructionClick = { navController.navigate("instruction")  }
+                            onInstructionClick = { navController.navigate("instruction")  },
+                            onProfileSettingsClick = {
+                                navController.navigate("profile_settings") // Укажите ваш route для настроек профиля
+                            },
+                            onLogoutClick = {
+                                // Логика выхода (очистка данных, если надо)
+                                navController.navigate("welcome") {
+                                    // Очищаем весь стек навигации, чтобы нельзя было вернуться назад
+                                    popUpTo(0)
+                                }
+                            }
                         )
                     }
                     composable("instruction") {
@@ -159,6 +190,13 @@ class MainActivity : ComponentActivity() {
                                 navController.navigate("home") {
                                     popUpTo("home") { inclusive = true }
                                 }
+                            },
+                        )
+                    }
+                    composable("profile_settings") { // route должен совпадать с тем, что вы указали в HomeScreen
+                        SettingsScreen(
+                            onBackClick = {
+                                navController.popBackStack() // Просто возвращаемся назад
                             }
                         )
                     }
